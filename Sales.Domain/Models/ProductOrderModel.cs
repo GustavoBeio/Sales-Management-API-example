@@ -10,5 +10,6 @@ namespace Sales.Domain.Models
     {
         public ClientModel Client { get; set; }
         public EmployeeModel Employee { get; set; }
+        public List<ProductOrderItemModel> ProductOrderItems { get; set; }
     }
 }
