@@ -12,6 +12,6 @@ namespace Sales.Domain.Interfaces.Repositories
         Task DeleteItemAsync(string productOrderItemId);
         Task<ProductOrderModel> GetbyIdAsync(string productOrderId);
         Task<List<ProductOrderModel>> ListbyFilterAsync(string productOrderId, string clientId, string employeeId);
-        Task<List<ProductOrderItemModel>> ListbyFilterItemAsync(string productOrderId, string clientId, string employeeId);
+        Task<List<ProductOrderItemModel>> ListbyFilterItemAsync(string productOrderId);
     }
 }
