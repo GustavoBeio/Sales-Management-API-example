@@ -13,6 +13,5 @@ namespace Sales.Domain.Interfaces.Repositories
         Task<ProductOrderModel> GetbyIdAsync(string productOrderId);
         Task<List<ProductOrderModel>> ListbyFilterAsync(string productOrderId, string clientId, string employeeId);
         Task<List<ProductOrderItemModel>> ListItembyOrderIdAsync(string productOrderId);
-        Task<List<ProductOrderItemModel>> ListItembyOrderIdAsync(string productOrderId);
     }
 }
