@@ -10,8 +10,4 @@
     <Compile Remove="Interfaces\Repositories\Interface1.cs" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Interfaces\Services\" />
-  </ItemGroup>
-
 </Project>
