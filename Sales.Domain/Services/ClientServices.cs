@@ -23,7 +23,7 @@ namespace Sales.Domain.Services
         {
             var response = new Response();
             var validation = new ClientValidation();
-            var result = validation.Validate(client);
+            FluentValidation.Results.ValidationResult result = validation.Validate(client);
 
             if (!result.IsValid)
             {
