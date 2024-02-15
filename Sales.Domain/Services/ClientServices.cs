@@ -19,8 +19,9 @@ namespace Sales.Domain.Services
         {
             _clientRepository = clientRepository;
         }
-        Task<Response> IClientServices.CreateAsync(ClientModel client)
+        async Task<Response> IClientServices.CreateAsync(ClientModel client)
         {
+            var response = new Response();
             var validation = new ClientValidation();
             var result = validation.Validate(client);
 
@@ -28,10 +29,17 @@ namespace Sales.Domain.Services
             {
                 foreach (var error in result.Errors)
                 {
-
+                    response.Report.Add(new Report()
+                    {
+                        Code = error.PropertyName,
+                        Message = error.ErrorMessage
+                    });
                 }
+                return response;
             }
-            throw new NotImplementedException();
+
+            await _clientRepository.CreateAsync(client);
+            return response;
         }
         public Task<Response> DeleteAsync(string clientId)
         {
