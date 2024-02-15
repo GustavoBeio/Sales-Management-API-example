@@ -1,6 +1,7 @@
 ﻿using Sales.Domain.Interfaces.Repositories;
 using Sales.Domain.Interfaces.Services;
 using Sales.Domain.Models;
+using Sales.Domain.Validations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,14 @@ namespace Sales.Domain.Services
         {
             var validation = new ClientValidation();
             var result = validation.Validate(client);
+
+            if (!result.IsValid)
+            {
+                foreach (var error in result.Errors)
+                {
+                    
+                }
+            }
             throw new NotImplementedException();
         }
 
