@@ -1,13 +1,14 @@
 ﻿using Sales.Domain.Models;
+using Sales.Domain.Validations.Base;
 
 namespace Sales.Domain.Interfaces.Services
 {
     public interface IClientServices
     {
-        Task CreateAsync(ClientModel client);
-        Task UpdadteAsync(ClientModel client);
-        Task<ClientModel> GetbyIdAsync(string clientId);
-        Task<List<ClientModel>> ListbyFilterAsync(string clientId, string name);
-        Task DeleteAsync(string clientId);
+        Task<Response> CreateAsync(ClientModel client);
+        Task<Response> UpdadteAsync(ClientModel client);
+        Task<Response<ClientModel>> GetbyIdAsync(string clientId);
+        Task<Response<List<ClientModel>>> ListbyFilterAsync(string clientId, string name);
+        Task<Response> DeleteAsync(string clientId);
     }
 }

@@ -2,6 +2,7 @@
 using Sales.Domain.Interfaces.Services;
 using Sales.Domain.Models;
 using Sales.Domain.Validations;
+using Sales.Domain.Validations.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace Sales.Domain.Services
         {
             _clientRepository = clientRepository;
         }
-        public Task CreateAsync(ClientModel client)
+        Task<Response> IClientServices.CreateAsync(ClientModel client)
         {
             var validation = new ClientValidation();
             var result = validation.Validate(client);
@@ -27,28 +28,27 @@ namespace Sales.Domain.Services
             {
                 foreach (var error in result.Errors)
                 {
-                    
+
                 }
             }
             throw new NotImplementedException();
         }
-
-        public Task DeleteAsync(string clientId)
+        public Task<Response> DeleteAsync(string clientId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ClientModel> GetbyIdAsync(string clientId)
+        public Task<Response<ClientModel>> GetbyIdAsync(string clientId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<ClientModel>> ListbyFilterAsync(string clientId, string name)
+        public Task<Response<List<ClientModel>>> ListbyFilterAsync(string clientId, string name)
         {
             throw new NotImplementedException();
         }
 
-        public Task UpdadteAsync(ClientModel client)
+        public Task<Response> UpdadteAsync(ClientModel client)
         {
             throw new NotImplementedException();
         }
