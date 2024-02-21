@@ -1,4 +1,5 @@
-﻿using Sales.Domain.Interfaces.Repositories;
+﻿using FluentValidation.Results;
+using Sales.Domain.Interfaces.Repositories;
 using Sales.Domain.Interfaces.Services;
 using Sales.Domain.Models;
 using Sales.Domain.Validations;
@@ -23,20 +24,7 @@ namespace Sales.Domain.Services
         {
             var response = new Response();
             var validation = new ClientValidation();
-            FluentValidation.Results.ValidationResult result = validation.Validate(client);
-
-            if (!result.IsValid)
-            {
-                foreach (var error in result.Errors)
-                {
-                    response.Report.Add(new Report()
-                    {
-                        Code = error.PropertyName,
-                        Message = error.ErrorMessage
-                    });
-                }
-                return response;
-            }
+            var errors = validation.Validate(client).GetErrors();
 
             await _clientRepository.CreateAsync(client);
             return response;
