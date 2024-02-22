@@ -1,14 +1,8 @@
-﻿using FluentValidation.Results;
-using Sales.Domain.Interfaces.Repositories;
+﻿using Sales.Domain.Interfaces.Repositories;
 using Sales.Domain.Interfaces.Services;
 using Sales.Domain.Models;
 using Sales.Domain.Validations;
 using Sales.Domain.Validations.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Sales.Domain.Services
 {
@@ -25,6 +19,9 @@ namespace Sales.Domain.Services
             var response = new Response();
             var validation = new ClientValidation();
             var errors = validation.Validate(client).GetErrors();
+
+            if (errors.Report.Count > 0) 
+                return errors;
 
             await _clientRepository.CreateAsync(client);
             return response;
@@ -44,9 +41,17 @@ namespace Sales.Domain.Services
             throw new NotImplementedException();
         }
 
-        public Task<Response> UpdadteAsync(ClientModel client)
+        async Task<Response> IClientServices.UpdadteAsync(ClientModel client)
         {
-            throw new NotImplementedException();
+            var response = new Response();
+            var validation = new ClientValidation();
+            var errors = validation.Validate(client).GetErrors();
+
+            if (errors.Report.Count > 0)
+                return errors;
+
+            await _clientRepository.CreateAsync(client);
+            return response;
         }
     }
 }
