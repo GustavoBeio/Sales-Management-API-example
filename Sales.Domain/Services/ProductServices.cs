@@ -1,11 +1,6 @@
 ﻿using Sales.Domain.Interfaces.Services;
 using Sales.Domain.Models;
 using Sales.Domain.Validations.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Sales.Domain.Services
 {
