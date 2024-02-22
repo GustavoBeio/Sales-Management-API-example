@@ -1,5 +1,9 @@
-﻿using Sales.Domain.Interfaces.Services;
+﻿using FluentValidation.Results;
+using Sales.Domain.Interfaces.Repositories;
+using Sales.Domain.Interfaces.Services;
 using Sales.Domain.Models;
+using Sales.Domain.Validations;
+using Sales.Domain.Validations.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,27 +14,37 @@ namespace Sales.Domain.Services
 {
     public class ClientServices : IClientServices
     {
-        public Task CreateAsync(ClientModel client)
+        private readonly IClientRepository _clientRepository;
+
+        public ClientServices(IClientRepository clientRepository)
+        {
+            _clientRepository = clientRepository;
+        }
+        async Task<Response> IClientServices.CreateAsync(ClientModel client)
+        {
+            var response = new Response();
+            var validation = new ClientValidation();
+            var errors = validation.Validate(client).GetErrors();
+
+            await _clientRepository.CreateAsync(client);
+            return response;
+        }
+        public Task<Response> DeleteAsync(string clientId)
         {
             throw new NotImplementedException();
         }
 
-        public Task DeleteAsync(string clientId)
+        public Task<Response<ClientModel>> GetbyIdAsync(string clientId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ClientModel> GetbyIdAsync(string clientId)
+        public Task<Response<List<ClientModel>>> ListbyFilterAsync(string clientId, string name)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<ClientModel>> ListbyFilterAsync(string clientId, string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task UpdadteAsync(ClientModel client)
+        public Task<Response> UpdadteAsync(ClientModel client)
         {
             throw new NotImplementedException();
         }
