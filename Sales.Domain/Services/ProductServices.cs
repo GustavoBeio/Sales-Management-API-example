@@ -1,5 +1,6 @@
 ﻿using Sales.Domain.Interfaces.Services;
 using Sales.Domain.Models;
+using Sales.Domain.Validations.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,27 +11,27 @@ namespace Sales.Domain.Services
 {
     public class ProductServices : IProductServices
     {
-        public Task CreateAsync(ProductModel product)
+        public Task<Response> CreateAsync(ProductModel product)
         {
             throw new NotImplementedException();
         }
 
-        public Task DeleteAsync(string productId)
+        public Task<Response> DeleteAsync(string productId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ProductModel> GetbyIdAsync(string productId)
+        public Task<Response<ProductModel>> GetbyIdAsync(string productId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<ProductModel>> ListbyFilterAsync(string productId, string clientId)
+        public Task<Response<List<ProductModel>>> ListbyFilterAsync(string productId, string clientId)
         {
             throw new NotImplementedException();
         }
 
-        public Task UpdateAsync(ProductModel product)
+        public Task<Response> UpdateAsync(ProductModel product)
         {
             throw new NotImplementedException();
         }
