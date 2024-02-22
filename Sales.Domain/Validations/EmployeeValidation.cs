@@ -3,9 +3,9 @@ using Sales.Domain.Models;
 
 namespace Sales.Domain.Validations
 {
-    public class ClientValidation : AbstractValidator<ClientModel>
+    public class EmployeeValidation : AbstractValidator<EmployeeModel>
     {
-        public ClientValidation()
+        public EmployeeValidation() 
         {
             ValidatorOptions.Global.DefaultClassLevelCascadeMode = CascadeMode.Stop;
 
@@ -13,13 +13,15 @@ namespace Sales.Domain.Validations
                 .NotNull()
                 .NotEmpty()
                 .Length(3, 30);
-            RuleFor(x => x.Email)
-                .NotNull()
-                .NotEmpty()
-                .EmailAddress(FluentValidation.Validators.EmailValidationMode.AspNetCoreCompatible);
-            RuleFor(x => x.PhoneNumber)
+
+            RuleFor(x => x.Login)
                 .NotNull()
                 .NotEmpty();
+
+            RuleFor(x => x.Passwordhash)
+                .NotNull()
+                .NotEmpty()
+                .MinimumLength(6);
         }
     }
 }
