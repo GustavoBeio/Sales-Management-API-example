@@ -3,54 +3,84 @@ using Sales.Domain.Interfaces.Services;
 using Sales.Domain.Models;
 using Sales.Domain.Validations;
 using Sales.Domain.Validations.Base;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Sales.Domain.Services
 {
-    public class ClientServices : IClientServices
+    public class ClientServices(IClientRepository clientRepository) : IClientServices
     {
-        private readonly IClientRepository _clientRepository;
+        private readonly IClientRepository _clientRepository = clientRepository;
 
-        public ClientServices(IClientRepository clientRepository)
-        {
-            _clientRepository = clientRepository;
-        }
         async Task<Response> IClientServices.CreateAsync(ClientModel client)
         {
-            var response = new Response();
-            var validation = new ClientValidation();
-            var errors = validation.Validate(client).GetErrors();
-
-            if (errors.Report.Count > 0) 
-                return errors;
-
-            await _clientRepository.CreateAsync(client);
-            return response;
-        }
-        public Task<Response> DeleteAsync(string clientId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Response<ClientModel>> GetbyIdAsync(string clientId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Response<List<ClientModel>>> ListbyFilterAsync(string clientId, string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        async Task<Response> IClientServices.UpdadteAsync(ClientModel client)
-        {
-            var response = new Response();
+            Response response = new();
             var validation = new ClientValidation();
             var errors = validation.Validate(client).GetErrors();
 
             if (errors.Report.Count > 0)
+            {
                 return errors;
-
+            }
             await _clientRepository.CreateAsync(client);
+            return response;
+        }
+        async Task<Response> IClientServices.DeleteAsync(string clientId)
+        {
+            Response response = new();
+
+            if (!await _clientRepository.ExistsbyIdAsync(clientId))
+            {
+                response.Report.Add(Report.Create($"Client {clientId} does not exists."));
+                return response;
+            }
+            await _clientRepository.DeleteAsync(clientId);
+            return response;
+        }
+
+        async Task<Response<ClientModel>> IClientServices.GetbyIdAsync(string clientId)
+        {
+            Response<ClientModel> response = new();
+
+            if (!await _clientRepository.ExistsbyIdAsync(clientId))
+            {
+                response.Report.Add(Report.Create($"Client {clientId} does not exists."));
+                return response;
+            }
+            response.Data = await _clientRepository.GetbyIdAsync(clientId);
+            return response;
+        }
+
+        async Task<Response<List<ClientModel>>> IClientServices.ListbyFilterAsync(string clientId, string name)
+        {
+            Response<List<ClientModel>> response = new();
+            if (!string.IsNullOrEmpty(clientId))
+            {
+                if (!await _clientRepository.ExistsbyIdAsync(clientId))
+                {
+                    response.Report.Add(Report.Create($"Client `{clientId} does not exists"));
+                    return response;
+                }
+            }
+            response.Data = await _clientRepository.ListbyFilterAsync(clientId, name);
+            return response;
+        }
+
+        async Task<Response> IClientServices.UpdadteAsync(ClientModel client)
+        {
+            Response response = new();
+            ClientValidation validation = new();
+            Response errors = validation.Validate(client).GetErrors();
+            if (errors.Report.Count > 0)
+            {
+                return errors;
+            }
+
+            if (!await _clientRepository.ExistsbyIdAsync(client.Id))
+            {
+                response.Report.Add(Report.Create($"Client {client.Id} does not exists."));
+                return response;
+            }
+            await _clientRepository.UpdateAsync(client);
             return response;
         }
     }

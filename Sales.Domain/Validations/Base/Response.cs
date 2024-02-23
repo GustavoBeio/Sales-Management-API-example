@@ -18,7 +18,7 @@ namespace Sales.Domain.Validations.Base
         }
         public Response(Report report) : this([report]) { } //Envia um objeto report unico para o construtor acima que cria uma lista com um valor apenas
         public List<Report> Report { get;}
-        public static Response<T> OK<T>(T data) => new Response<T>(data);
+        public static Response<T> OK<T>(T data) => new(data);
         public static Response OK() => new Response();
         public static Response Unprocessable(List<Report> reports) => new Response(reports);
         public static Response Unprocessable(Report report) => new Response(report);
@@ -30,10 +30,16 @@ namespace Sales.Domain.Validations.Base
         {
 
         }
-        public Response(T data, List<Report>? reports = null) : base(reports)
+
+        public Response(T data)
         {
             Data = data;
         }
-        public T Data { get; }
+
+        public Response(T data, List<Report> reports) : base(reports)
+        {
+            Data = data;
+        }
+        public T Data { get; set; }
     }
 }
