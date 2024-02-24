@@ -13,7 +13,7 @@ namespace Sales.Domain.Services
         async Task<Response> IClientServices.CreateAsync(ClientModel client)
         {
             Response response = new();
-            var validation = new ClientValidation();
+            ClientValidation validation = new();
             var errors = validation.Validate(client).GetErrors();
 
             if (errors.Report.Count > 0)
