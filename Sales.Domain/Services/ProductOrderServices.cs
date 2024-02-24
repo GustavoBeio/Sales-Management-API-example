@@ -1,32 +1,43 @@
-﻿using Sales.Domain.Interfaces.Services;
+﻿using Sales.Domain.Interfaces.Repositories;
+using Sales.Domain.Interfaces.Services;
 using Sales.Domain.Models;
+using Sales.Domain.Validations;
 using Sales.Domain.Validations.Base;
 
 namespace Sales.Domain.Services
 {
-    public class ProductOrderServices : IProductOrderServices
+    public class ProductOrderServices(IProductOrderRepository productOrderRepository) : IProductOrderServices
     {
-        public Task<Response> CreateAsync(ProductOrderModel productOrder)
+        private readonly IProductOrderRepository _productOrderRepository = productOrderRepository;
+        async Task<Response> IProductOrderServices.CreateAsync(ProductOrderModel productOrder)
+        {
+            Response response = new();
+            ProductOrderValidation validation = new();
+            var errors = validation.Validate(productOrder).GetErrors();
+
+            if (errors.Report.Count > 0)
+            {
+                return errors;
+            }
+            await _productOrderRepository.CreateAsync(productOrder);
+            return response;
+        }
+        Task<Response> IProductOrderServices.DeleteAsync(string productOrderId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Response> DeleteAsync(string productOrderId)
+        Task<Response<ProductOrderModel>> IProductOrderServices.GetbyIdAsync(string productOrderId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Response<ProductOrderModel>> GetbyIdAsync(string productOrderId)
+        Task<Response<List<ProductOrderModel>>> IProductOrderServices.ListbyFilterAsync(string productOrderId, string clientId, string employeeId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Response<List<ProductOrderModel>>> ListbyFilterAsync(string productOrderId, string clientId, string employeeId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Response> UpdadteAsync(ProductOrderModel productOrder)
+        Task<Response> IProductOrderServices.UpdadteAsync(ProductOrderModel productOrder)
         {
             throw new NotImplementedException();
         }

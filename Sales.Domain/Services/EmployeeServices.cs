@@ -6,23 +6,20 @@ using Sales.Domain.Validations.Base;
 
 namespace Sales.Domain.Services
 {
-    public class EmployeeServices : IEmployeeServices
+    public class EmployeeServices(IEmployeeRepository employeeRepository) : IEmployeeServices
     {
-        private readonly IEmployeeRepository _employeeRepository;
+        private readonly IEmployeeRepository _employeeRepository = employeeRepository;
 
-        public EmployeeServices(IEmployeeRepository employeeRepository)
-        {
-            _employeeRepository = employeeRepository;
-        }
         async Task<Response> IEmployeeServices.CreateAsync(EmployeeModel employee)
         {
-            var response = new Response();
-            var validation = new EmployeeValidation();
+            Response response = new();
+            EmployeeValidation validation = new();
             var errors = validation.Validate(employee).GetErrors();
 
             if (errors.Report.Count > 0)
+            {
                 return errors;
-
+            }
             await _employeeRepository.CreateAsync(employee);
             return response;
         }
@@ -34,8 +31,8 @@ namespace Sales.Domain.Services
 
         async Task<Response> IEmployeeServices.UpdateAsync(EmployeeModel employee)
         {
-            var response = new Response();
-            var validation = new EmployeeValidation();
+            Response response = new();
+            EmployeeValidation validation = new();
             var errors = validation.Validate(employee).GetErrors();
 
             if (errors.Report.Count > 0)
@@ -45,19 +42,45 @@ namespace Sales.Domain.Services
             return response;
         }
 
-        Task<Response> IEmployeeServices.DeleteAsync(string employeeId)
+        async Task<Response> IEmployeeServices.DeleteAsync(string employeeId)
         {
-            throw new NotImplementedException();
+            Response response = new();
+
+            if (!await _employeeRepository.ExistsbyIdAsync(employeeId))
+            {
+                response.Report.Add(Report.Create($"employee {employeeId} does not exists."));
+                return response;
+            }
+            await _employeeRepository.DeleteAsync(employeeId);
+            return response;
         }
 
-        Task<Response<EmployeeModel>> IEmployeeServices.GetbyIdAsync(string employeeId)
+        async Task<Response<EmployeeModel>> IEmployeeServices.GetbyIdAsync(string employeeId)
         {
-            throw new NotImplementedException();
+            Response<EmployeeModel> response = new();
+
+            if (!await _employeeRepository.ExistsbyIdAsync(employeeId))
+            {
+                response.Report.Add(Report.Create($"employee {employeeId} does not exists."));
+                return response;
+            }
+            response.Data = await _employeeRepository.GetbyIdAsync(employeeId);
+            return response;
         }
 
-        Task<Response<List<EmployeeModel>>> IEmployeeServices.ListbyFilterAsync(string employeeId, string name)
+        async Task<Response<List<EmployeeModel>>> IEmployeeServices.ListbyFilterAsync(string employeeId, string name)
         {
-            throw new NotImplementedException();
+            Response<List<EmployeeModel>> response = new();
+            if (!string.IsNullOrEmpty(employeeId))
+            {
+                if (!await _employeeRepository.ExistsbyIdAsync(employeeId))
+                {
+                    response.Report.Add(Report.Create($"Client `{employeeId} does not exists"));
+                    return response;
+                }
+            }
+            response.Data = await _employeeRepository.ListbyFilterAsync(employeeId, name);
+            return response;
         }
     }
 }
