@@ -3,7 +3,6 @@ using Sales.Domain.Interfaces.Services;
 using Sales.Domain.Models;
 using Sales.Domain.Validations;
 using Sales.Domain.Validations.Base;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Sales.Domain.Services
 {
