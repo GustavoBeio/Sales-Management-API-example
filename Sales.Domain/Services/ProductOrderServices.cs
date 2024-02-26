@@ -22,27 +22,46 @@ namespace Sales.Domain.Services
             await _productOrderRepository.CreateAsync(productOrder);
             return response;
         }
-        Task<Response> IProductOrderServices.DeleteAsync(string productOrderId)
+        async Task<Response> IProductOrderServices.DeleteAsync(string productOrderId)
         {
             Response response = new();
 
-            if (!await _employeeRepository.ExistsbyIdAsync(employeeId))
+            if (!await _productOrderRepository.ExistsbyIdAsync(productOrderId))
             {
-                response.Report.Add(Report.Create($"employee {employeeId} does not exists."));
+                response.Report.Add(Report.Create($"employee {productOrderId} does not exists."));
                 return response;
             }
-            await _employeeRepository.DeleteAsync(employeeId);
+            await _productOrderRepository.DeleteAsync(productOrderId);
             return response; ;
         }
 
-        Task<Response<ProductOrderModel>> IProductOrderServices.GetbyIdAsync(string productOrderId)
+        async Task<Response<ProductOrderModel>> IProductOrderServices.GetbyIdAsync(string productOrderId)
         {
-            throw new NotImplementedException();
+            Response<ProductOrderModel> response = new();
+            if(!await _productOrderRepository.ExistsbyIdAsync(productOrderId))
+            {
+                response.Report.Add(Report.Create($"Order {productOrderId} does not exists."));
+                return response;
+            }
+            var data = await _productOrderRepository.GetbyIdAsync(productOrderId);
+            data.ProductOrderItems = await _productOrderRepository.ListItembyOrderIdAsync(productOrderId);
+            response.Data = data;
+            return response;
         }
 
-        Task<Response<List<ProductOrderModel>>> IProductOrderServices.ListbyFilterAsync(string productOrderId, string clientId, string employeeId)
+        async Task<Response<List<ProductOrderModel>>> IProductOrderServices.ListbyFilterAsync(string productOrderId, string clientId, string employeeId)
         {
-            throw new NotImplementedException();
+            Response<List<ProductOrderModel>> response = new();
+            if (!string.IsNullOrWhiteSpace(productOrderId))
+            {
+                if (!await _productOrderRepository.ExistsbyIdAsync(productOrderId))
+                {
+                    response.Report.Add(Report.Create($"employee {productOrderId} does not exists."));
+                    return response;
+                }
+            }
+            await _productOrderRepository.DeleteAsync(productOrderId);
+            return response; ;
         }
 
         async Task<Response> IProductOrderServices.UpdadteAsync(ProductOrderModel productOrder)
@@ -57,7 +76,7 @@ namespace Sales.Domain.Services
             }
             if (!await _productOrderRepository.ExistsbyIdAsync(productOrder.Id))
             {
-                response.Report.Add(Report.Create($"Client {client.Id} does not exists."));
+                response.Report.Add(Report.Create($"Client {productOrder.Id} does not exists."));
                 return response;
             }
             await _productOrderRepository.CreateAsync(productOrder);

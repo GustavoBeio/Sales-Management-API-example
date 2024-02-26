@@ -73,7 +73,6 @@ namespace Sales.Domain.Services
             {
                 return errors;
             }
-
             if (!await _clientRepository.ExistsbyIdAsync(client.Id))
             {
                 response.Report.Add(Report.Create($"Client {client.Id} does not exists."));
