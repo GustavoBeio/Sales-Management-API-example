@@ -73,7 +73,7 @@ namespace Sales.Domain.Services
         async Task<Response<List<EmployeeModel>>> IEmployeeServices.ListbyFilterAsync(string employeeId, string name)
         {
             Response<List<EmployeeModel>> response = new();
-            if (!string.IsNullOrEmpty(employeeId))
+            if (!string.IsNullOrWhiteSpace(employeeId))
             {
                 if (!await _employeeRepository.ExistsbyIdAsync(employeeId))
                 {
