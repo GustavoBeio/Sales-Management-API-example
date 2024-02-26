@@ -1,38 +1,86 @@
-﻿using Sales.Domain.Interfaces.Services;
+﻿using Sales.Domain.Interfaces.Repositories;
+using Sales.Domain.Interfaces.Services;
 using Sales.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Sales.Domain.Validations;
+using Sales.Domain.Validations.Base;
 
 namespace Sales.Domain.Services
 {
-    public class ProductServices : IProductServices
+    public class ProductServices(IProductRepository productRepository) : IProductServices
     {
-        public Task CreateAsync(ProductModel product)
+        private readonly IProductRepository _productRepository = productRepository;
+        async Task<Response> IProductServices.CreateAsync(ProductModel product)
         {
-            throw new NotImplementedException();
+            Response response = new();
+            ProductValidation validation = new();
+            var errors = validation.Validate(product).GetErrors();
+
+            if (errors.Report.Count > 0)
+            {
+                return errors;
+            }
+            await _productRepository.CreateAsync(product);
+            return response;
         }
 
-        public Task DeleteAsync(string productId)
+        async Task<Response> IProductServices.DeleteAsync(string productId)
         {
-            throw new NotImplementedException();
+            Response response = new();
+
+            if (!await _productRepository.ExistsbyIdAsync(productId))
+            {
+                response.Report.Add(Report.Create($"Product {productId} does not exists."));
+                return response;
+            }
+            await _productRepository.DeleteAsync(productId);
+            return response;
         }
 
-        public Task<ProductModel> GetbyIdAsync(string productId)
+         async Task<Response<ProductModel>> IProductServices.GetbyIdAsync(string productId)
         {
-            throw new NotImplementedException();
+            Response<ProductModel> response = new();
+
+            if (!await _productRepository.ExistsbyIdAsync(productId))
+            {
+                response.Report.Add(Report.Create($"Product {productId} does not exists."));
+                return response;
+            }
+            await _productRepository.GetbyIdAsync(productId);
+            return response;
         }
 
-        public Task<List<ProductModel>> ListbyFilterAsync(string productId, string clientId)
+        async Task<Response<List<ProductModel>>> IProductServices.ListbyFilterAsync(string productId, string description)
         {
-            throw new NotImplementedException();
+            Response<List<ProductModel>> response = new();
+            if (!string.IsNullOrWhiteSpace(productId))
+            {
+                if (!await _productRepository.ExistsbyIdAsync(productId))
+                {
+                    response.Report.Add(Report.Create($"Product `{productId} does not exists"));
+                    return response;
+                }
+            }
+            response.Data = await _productRepository.ListbyFilterAsync(productId, description);
+            return response;
         }
 
-        public Task UpdateAsync(ProductModel product)
+        async Task<Response> IProductServices.UpdateAsync(ProductModel product)
         {
-            throw new NotImplementedException();
+            Response response = new();
+            ProductValidation validation = new();
+            var errors = validation.Validate(product).GetErrors();
+
+            if (errors.Report.Count > 0)
+            {
+                return errors;
+            }
+            if (!await _productRepository.ExistsbyIdAsync(product.Id))
+            {
+                response.Report.Add(Report.Create($"product {product.Id} does not exists."));
+                return response;
+            }
+            await _productRepository.UpdateAsync(product);
+            return response;
         }
     }
 }
