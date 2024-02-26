@@ -52,7 +52,7 @@ namespace Sales.Domain.Services
         async Task<Response<List<ClientModel>>> IClientServices.ListbyFilterAsync(string clientId, string name)
         {
             Response<List<ClientModel>> response = new();
-            if (!string.IsNullOrEmpty(clientId))
+            if (!string.IsNullOrWhiteSpace(clientId))
             {
                 if (!await _clientRepository.ExistsbyIdAsync(clientId))
                 {
