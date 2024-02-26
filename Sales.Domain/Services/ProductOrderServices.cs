@@ -24,7 +24,15 @@ namespace Sales.Domain.Services
         }
         Task<Response> IProductOrderServices.DeleteAsync(string productOrderId)
         {
-            throw new NotImplementedException();
+            Response response = new();
+
+            if (!await _employeeRepository.ExistsbyIdAsync(employeeId))
+            {
+                response.Report.Add(Report.Create($"employee {employeeId} does not exists."));
+                return response;
+            }
+            await _employeeRepository.DeleteAsync(employeeId);
+            return response; ;
         }
 
         Task<Response<ProductOrderModel>> IProductOrderServices.GetbyIdAsync(string productOrderId)
@@ -37,9 +45,23 @@ namespace Sales.Domain.Services
             throw new NotImplementedException();
         }
 
-        Task<Response> IProductOrderServices.UpdadteAsync(ProductOrderModel productOrder)
+        async Task<Response> IProductOrderServices.UpdadteAsync(ProductOrderModel productOrder)
         {
-            throw new NotImplementedException();
+            Response response = new();
+            ProductOrderValidation validation = new();
+            var errors = validation.Validate(productOrder).GetErrors();
+
+            if (errors.Report.Count > 0)
+            {
+                return errors;
+            }
+            if (!await _productOrderRepository.ExistsbyIdAsync(productOrder.Id))
+            {
+                response.Report.Add(Report.Create($"Client {client.Id} does not exists."));
+                return response;
+            }
+            await _productOrderRepository.CreateAsync(productOrder);
+            return response;
         }
     }
 }

@@ -36,7 +36,9 @@ namespace Sales.Domain.Services
             var errors = validation.Validate(employee).GetErrors();
 
             if (errors.Report.Count > 0)
+            {
                 return errors;
+            }
 
             await _employeeRepository.CreateAsync(employee);
             return response;
