@@ -75,7 +75,7 @@ namespace Sales.Domain.Services
             {
                 if (!await _employeeRepository.ExistsbyIdAsync(employeeId))
                 {
-                    response.Report.Add(Report.Create($"Client `{employeeId} does not exists"));
+                    response.Report.Add(Report.Create($"employee `{employeeId} does not exists"));
                     return response;
                 }
             }
