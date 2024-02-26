@@ -8,7 +8,7 @@ namespace Sales.Domain.Models
 {
     public abstract class EntityBase
     {
-        protected string Id { get; set; }
-        protected DateTime CreatedAt { get; set; }
+        public string Id { get; set; } = "";
+        public DateTime CreatedAt { get; set; }
     }
 }
