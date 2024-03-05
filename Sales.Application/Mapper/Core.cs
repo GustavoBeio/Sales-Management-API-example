@@ -18,9 +18,6 @@ namespace Sales.Application.Mapper
         {
             _ = CreateMap<CreateClientRequest, ClientModel>();
             _ = CreateMap<UpdateClientRequest, ClientModel>();
-            _ = CreateMap<GetbyIdClientRequest, ClientModel>();
-            _ = CreateMap<ListbyFilterClientRequest, ClientModel>();
-            _ = CreateMap<DeleteClientRequest, ClientModel>();
             _ = CreateMap<ClientModel, ClientResponse>();
         }
         private void EmployeeMap()
