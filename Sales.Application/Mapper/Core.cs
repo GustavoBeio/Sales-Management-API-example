@@ -22,7 +22,9 @@ namespace Sales.Application.Mapper
         }
         private void EmployeeMap()
         {
+            _ = CreateMap<AuthEmployeeRequest, EmployeeModel>();
             _ = CreateMap<CreateEmployeeRequest, EmployeeModel>();
+            _ = CreateMap<UpdateEmployeeRequest, EmployeeModel>();
             _ = CreateMap<EmployeeModel, EmployeeResponse>();
         }
     }
