@@ -1,6 +1,8 @@
-﻿namespace Sales.Domain.Models
+﻿using Sales.Domain.Models;
+
+namespace Sales.Application.DataContract.Request
 {
-    public class ProductOrderModel : EntityBase
+    public class CreateProductOrderRequest
     {
         public ClientModel Client { get; set; } = new();
         public EmployeeModel Employee { get; set; } = new();

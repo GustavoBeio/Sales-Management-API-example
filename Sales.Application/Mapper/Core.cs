@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using Sales.Application.DataContract.Request;
 using Sales.Application.DataContract.Request.Client;
 using Sales.Application.DataContract.Request.Employee;
 using Sales.Application.DataContract.Request.Product;
+using Sales.Application.DataContract.Request.ProductOrder;
 using Sales.Application.DataContract.Response;
 using Sales.Application.DataContract.Response.Client;
 using Sales.Application.DataContract.Response.Employee;
@@ -34,6 +36,12 @@ namespace Sales.Application.Mapper
             _ = CreateMap<CreateProductRequest, ProductModel>();
             _ = CreateMap<UpdateProductRequest, ProductModel>();
             _ = CreateMap<ProductModel, ProductResponse>();
+        }
+        private void ProductOrderMap()
+        {
+            _ = CreateMap<CreateProductOrderRequest, ProductOrderModel>();
+            _ = CreateMap<UpdateProductOrderRequest, ProductOrderModel>();
+            _ = CreateMap<ProductModel, ProductOrderResponse>();
         }
     }
 }
