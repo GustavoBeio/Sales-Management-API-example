@@ -1,6 +1,6 @@
-﻿namespace Sales.Domain.Models
+﻿namespace Sales.Application.DataContract.Request.Product
 {
-    public class ProductModel : EntityBase
+    public class CreateProductRequest
     {
         public string Description { get; set; } = string.Empty;
         public decimal Sellvalue { get; set; }

@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Sales.Application.DataContract.Request.Client;
 using Sales.Application.DataContract.Request.Employee;
+using Sales.Application.DataContract.Request.Product;
+using Sales.Application.DataContract.Response;
 using Sales.Application.DataContract.Response.Client;
 using Sales.Application.DataContract.Response.Employee;
 using Sales.Domain.Models;
@@ -26,6 +28,12 @@ namespace Sales.Application.Mapper
             _ = CreateMap<CreateEmployeeRequest, EmployeeModel>();
             _ = CreateMap<UpdateEmployeeRequest, EmployeeModel>();
             _ = CreateMap<EmployeeModel, EmployeeResponse>();
+        }
+        private void ProductMap()
+        {
+            _ = CreateMap<CreateProductRequest, ProductModel>();
+            _ = CreateMap<UpdateProductRequest, ProductModel>();
+            _ = CreateMap<ProductModel, ProductResponse>();
         }
     }
 }
