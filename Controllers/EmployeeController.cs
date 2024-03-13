@@ -1,46 +1,45 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Sales.Application.DataContract.Request.Client;
+using Sales.Application.DataContract.Request.Employee;
 using Sales.Application.Interfaces;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Sales_Management_API.Controllers
 {
-    [Route("api/client")]
+    [Route("api/employee")]
     [ApiController]
-    public class ClientController(IClientApplication clientApplication) : ControllerBase
+    public class EmployeeController(IEmployeeApplication employeeApplication) : ControllerBase
     {
-        private readonly IClientApplication _clientApplication = clientApplication;
-
-        // GET: api/<ClientController>
+        private readonly IEmployeeApplication _employeeApplication = employeeApplication;
+        // GET: api/<ValuesController>
         [HttpGet]
         public IEnumerable<string> Get()
         {
             return ["value1", "value2"];
         }
 
-        // GET api/<ClientController>/5
+        // GET api/<ValuesController>/5
         [HttpGet("{id}")]
         public string Get(int id)
         {
             return "value";
         }
 
-        // POST api/<ClientController>
+        // POST api/<ValuesController>
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] CreateClientRequest clientRequest)
+        public async Task<ActionResult> Post([FromBody] CreateEmployeeRequest employeeRequest)
         {
-            var response = await _clientApplication.CreateAsync(clientRequest);
+            var response = await _employeeApplication.CreateAsync(employeeRequest);
             return response.Report.Count != 0 ? UnprocessableEntity(response.Report) : Ok(response);
         }
 
-        // PUT api/<ClientController>/5
+        // PUT api/<ValuesController>/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
         }
 
-        // DELETE api/<ClientController>/5
+        // DELETE api/<ValuesController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

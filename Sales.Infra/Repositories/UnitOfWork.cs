@@ -5,7 +5,8 @@ namespace Sales.Infra.Repositories
 {
     public class UnitOfWork : IUnitOfWork
     {
-        public IClientRepository ClientRepository => throw new NotImplementedException();
+        private IClientRepository? _clientRepository;
+        public IClientRepository ClientRepository => _clientRepository ??= new ClientRepository(DbConnector);
 
         public IEmployeeRepository EmployeeRepository => throw new NotImplementedException();
 
